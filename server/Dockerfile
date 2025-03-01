@@ -19,6 +19,7 @@ WORKDIR /globetrotter
 # Copy the binary and config file from the builder stage
 COPY --from=builder /globetrotter/server .
 COPY --from=builder /globetrotter/app.yaml ./app.yaml
+COPY --from=builder /globetrotter/dataset.json ./dataset.json
 
 # Expose application port (change if necessary)
 EXPOSE 8080
