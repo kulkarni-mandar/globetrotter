@@ -4,6 +4,7 @@ import (
 	"flag"
 	"globetrotter/pkg/config"
 	"globetrotter/pkg/controller"
+	"globetrotter/pkg/database"
 	"globetrotter/pkg/logging"
 	"globetrotter/pkg/middlewares"
 
@@ -23,6 +24,10 @@ func init() {
 	config.New(&configPath)
 
 	logging.Debug("loaded config", "config", config.Get())
+
+	database.New()
+
+	logging.Debug("connected to database")
 }
 
 func main() {

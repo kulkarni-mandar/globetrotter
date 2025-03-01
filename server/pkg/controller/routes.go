@@ -7,6 +7,7 @@ func SetupRoutes(router *gin.RouterGroup) {
 	internal := router.Group("/internal")
 	{
 		internal.GET("/health", healthController)
+		internal.GET("/config", configController)
 	}
 
 }
