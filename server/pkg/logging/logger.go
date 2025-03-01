@@ -24,8 +24,8 @@ func init() {
 	logger = newLogger.Sugar()
 }
 
-func Error(err error, keyArgsValues ...any) {
-	logger.Errorw(fmt.Sprint(err), keyArgsValues...)
+func Error(message string, keyArgsValues ...any) {
+	logger.Errorw(message, keyArgsValues...)
 }
 
 func Info(message string, keyArgsValues ...any) {

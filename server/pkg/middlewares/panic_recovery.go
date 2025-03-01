@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"errors"
 	"globetrotter/pkg/logging"
 	"net/http"
 	"runtime/debug"
@@ -16,7 +15,8 @@ func PanicRecovery() gin.HandlerFunc {
 			if err := recover(); err != nil {
 
 				logging.Error(
-					errors.New("panic recovery"),
+					"panic recovery",
+					"error", err,
 					"stackTrace", debug.Stack(),
 				)
 
