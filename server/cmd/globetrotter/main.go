@@ -34,7 +34,7 @@ func main() {
 		middlewares.PanicRecovery(),
 	)
 
-	controller.SetupRoutes(router)
+	controller.SetupRoutes(router.Group("/api"))
 
 	logging.Info(
 		"starting server",

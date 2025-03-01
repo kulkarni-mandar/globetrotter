@@ -2,7 +2,7 @@ package controller
 
 import "github.com/gin-gonic/gin"
 
-func SetupRoutes(router *gin.Engine) {
+func SetupRoutes(router *gin.RouterGroup) {
 
 	internal := router.Group("/internal")
 	{
