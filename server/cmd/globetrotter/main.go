@@ -3,7 +3,11 @@ package main
 import (
 	"flag"
 	"globetrotter/pkg/config"
+	"globetrotter/pkg/controller"
 	"globetrotter/pkg/logging"
+	"globetrotter/pkg/middlewares"
+
+	"github.com/gin-gonic/gin"
 )
 
 var configPath string
@@ -21,4 +25,21 @@ func init() {
 	logging.Debug("loaded config", "config", config.Get())
 }
 
-func main() {}
+func main() {
+
+	router := gin.New()
+
+	router.Use(
+		middlewares.Logger(),
+		middlewares.PanicRecovery(),
+	)
+
+	controller.SetupRoutes(router)
+
+	logging.Info(
+		"starting server",
+		"port", config.Get().Server.Port,
+	)
+
+	router.Run(":" + config.Get().Server.Port)
+}

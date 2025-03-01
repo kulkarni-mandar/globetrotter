@@ -24,8 +24,10 @@ func New(configPath *string) *models.Config {
 	}
 
 	config = &models.Config{
-		Name: viper.GetString("server.name"),
-		Port: viper.GetString("server.port"),
+		Server: &models.Server{
+			Name: viper.GetString("server.name"),
+			Port: viper.GetString("server.port"),
+		},
 	}
 
 	return config
