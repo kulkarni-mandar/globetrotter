@@ -8,6 +8,12 @@ func SetupRoutes(router *gin.RouterGroup) {
 	{
 		internal.GET("/health", healthController)
 		internal.GET("/config", configController)
+		internal.POST("/dataset/refresh", refreshDataset)
+	}
+
+	users := router.Group("/users")
+	{
+		users.POST("", addNewUser)
 	}
 
 }
