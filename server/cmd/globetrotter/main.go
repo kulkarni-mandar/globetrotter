@@ -27,6 +27,7 @@ func init() {
 
 func main() {
 
+	gin.SetMode(gin.ReleaseMode)
 	router := gin.New()
 
 	router.Use(
