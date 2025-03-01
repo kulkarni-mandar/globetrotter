@@ -39,9 +39,10 @@ func New(configPath *string) *models.Config {
 		config.Database.Postgres = &models.Postgres{
 			Username:     viper.GetString("database.postgres.username"),
 			Password:     viper.GetString("database.postgres.password"),
-			Port:         viper.GetString("database.postgres.port"),
+			Port:         viper.GetInt("database.postgres.port"),
 			DatabaseName: viper.GetString("database.postgres.dbName"),
-			Host:         viper.GetString("database.postgre.host"),
+			Host:         viper.GetString("database.postgres.host"),
+			Schema:       viper.GetString("database.postgres.schema"),
 		}
 
 	}

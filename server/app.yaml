@@ -5,8 +5,9 @@ server:
 database:
   type: postgres
   postgres:
-    username: ""
-    password: ""
-    port: ""
-    dbName: ""
-    host: ""
+    host: "localhost"
+    port: 5432
+    username: "user"
+    password: "password"
+    dbName: "globetrotter"
+    schema: "globetrotter"

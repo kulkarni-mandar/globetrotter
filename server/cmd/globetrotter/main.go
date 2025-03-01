@@ -23,8 +23,6 @@ func init() {
 	// init config
 	config.New(&configPath)
 
-	logging.Debug("loaded config", "config", config.Get())
-
 	database.New()
 
 	logging.Debug("connected to database")

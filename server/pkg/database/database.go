@@ -17,10 +17,18 @@ func New() (*gorm.DB, error) {
 	switch dbConfig.Type {
 	case "postgres":
 		db, err = newPostgres(dbConfig.Postgres)
-		return db, err
 	default:
-		return nil, fmt.Errorf("invalid database type: %v", dbConfig.Type)
+		db = nil
+		err = fmt.Errorf("invalid database type: %v", dbConfig.Type)
 	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	db.Exec(fmt.Sprintf("CREATE SCHEMA IF NOT EXISTS %v", config.Get().Server.Name))
+
+	return db, nil
 }
 
 func Get() *gorm.DB {

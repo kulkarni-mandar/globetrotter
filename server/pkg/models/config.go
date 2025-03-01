@@ -18,7 +18,8 @@ type Database struct {
 type Postgres struct {
 	Username     string `json:"-"`
 	Password     string `json:"-"`
-	Port         string
+	Port         int
 	DatabaseName string
 	Host         string
+	Schema       string
 }
