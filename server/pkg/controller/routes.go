@@ -16,4 +16,13 @@ func SetupRoutes(router *gin.RouterGroup) {
 		users.POST("", addNewUser)
 	}
 
+	game := router.Group("/game")
+	{
+		game.POST("/play/:userName", newOrJoinGame)
+		game.POST("/play/:userName/:sessionId/invite", inviteToGame)
+		game.POST("/play/:userName/:sessionId/next", nextQuestion)
+		game.POST("/play/:userName/:sessionId/:clueId/validate", validateAnswer)
+		game.POST("/play/:userName/:sessionId/end", endGame)
+	}
+
 }
