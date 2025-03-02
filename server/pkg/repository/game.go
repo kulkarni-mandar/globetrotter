@@ -17,18 +17,18 @@ func NewGame(game *models.Game) error {
 func GetGame(sessionID int) (*models.Game, error) {
 	var game models.Game
 
-	err := database.Get().Model(&models.Game{SessionID: sessionID}).Scan(&game).Error
+	err := database.Get().Model(&models.Game{}).Where(&models.Game{SessionID: sessionID}).Scan(&game).Error
 
 	return &game, err
 }
 
 func AddOpponent(gameID int, opponentUserID int) error {
-	return database.Get().Model(&models.Game{ID: gameID}).Update("user_two_id", opponentUserID).Error
+	return database.Get().Model(&models.Game{}).Where(&models.Game{ID: gameID}).Update("user_two_id", opponentUserID).Error
 }
 
 func CheckGameIsActiveAndNoOpponent(userID string, sessionID int) error {
 	var count int64
-	err := database.Get().Model(&models.Game{}).
+	err := database.Get().Model(&models.Game{}).Where(&models.Game{}).
 		Where("session_id = ? AND is_completed = ? AND user_one_id = ? AND user_two_id = ?", sessionID, false, userID, 0).
 		Scan(&count).Error
 	if err != nil {
@@ -44,9 +44,8 @@ func CheckGameIsActiveAndNoOpponent(userID string, sessionID int) error {
 
 func CheckGameIsActive(sessionID int) error {
 	var count int64
-	err := database.Get().Model(&models.Game{}).
-		Where("session_id = ? AND is_completed = ?", sessionID, false).
-		Scan(&count).Error
+	err := database.Get().Model(&models.Game{}).Where(&models.Game{SessionID: sessionID, IsCompleted: false}).
+		Count(&count).Error
 	if err != nil {
 		return err
 	}
@@ -72,7 +71,7 @@ func GetRandomCity() (models.City, error) {
 func GetClues(cityID int) ([]models.Clue, error) {
 	var clues []models.Clue
 
-	err := database.Get().Model(&models.Clue{CitiesID: cityID}).Scan(&clues).Error
+	err := database.Get().Model(&models.Clue{}).Where(&models.Clue{CitiesID: cityID}).Scan(&clues).Error
 	if err != nil {
 		return nil, err
 	}
@@ -94,7 +93,7 @@ func GetOptions(correctCityID int) ([]models.City, error) {
 func GetCorrectCity(clueID int) (models.City, error) {
 	var city models.City
 
-	err := database.Get().Model(&models.Clue{ID: clueID}).InnerJoins("cities on cities.id = clues.cities_id").Scan(&city).Error
+	err := database.Get().Model(&models.City{}).Where("clues.id = ?", clueID).Joins("JOIN clues on cities.id = clues.cities_id").Scan(&city).Error
 	if err != nil {
 		return models.City{}, err
 	}
@@ -105,7 +104,7 @@ func GetCorrectCity(clueID int) (models.City, error) {
 func GetFacts(cityID int) ([]models.Fact, error) {
 	var facts []models.Fact
 
-	err := database.Get().Model(&models.Fact{CitiesID: cityID}).Select("fact").Scan(&facts).Error
+	err := database.Get().Model(&models.Fact{}).Where(&models.Fact{CitiesID: cityID}).Select("fact").Scan(&facts).Error
 	if err != nil {
 		return nil, err
 	}
@@ -114,7 +113,7 @@ func GetFacts(cityID int) ([]models.Fact, error) {
 }
 
 func IncreaseScore(userID int, sessionID int) error {
-	result := database.Get().Model(&models.Game{SessionID: sessionID, UserOneID: userID}).Update("score_one", gorm.Expr("score_one + 1"))
+	result := database.Get().Model(&models.Game{}).Where(&models.Game{SessionID: sessionID, UserOneID: userID}).Update("score_one", gorm.Expr("score_one + 1"))
 	affectedRows := result.RowsAffected
 	err := result.Error
 
@@ -130,7 +129,7 @@ func IncreaseScore(userID int, sessionID int) error {
 }
 
 func EndGame(sessionID int, completedByUserID int, winnerUserID int) error {
-	return database.Get().Model(&models.Game{SessionID: sessionID}).Updates(&models.Game{
+	return database.Get().Model(&models.Game{}).Where(&models.Game{SessionID: sessionID}).Updates(&models.Game{
 		CompletedAt:       sql.NullTime{Time: time.Now()},
 		IsCompleted:       true,
 		CompletedByUserID: completedByUserID,

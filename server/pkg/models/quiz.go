@@ -24,7 +24,7 @@ type Fact struct {
 
 type Game struct {
 	ID                int          `gorm:"column:id;primaryKey;autoIncrement:true" json:"id,omitempty"`
-	StartedAt         sql.NullTime `gorm:"column:started_at" json:"started_at,omitempty"`
+	CreatedAt         sql.NullTime `gorm:"column:created_at" json:"started_at,omitempty"`
 	CompletedAt       sql.NullTime `gorm:"column:completed_at" json:"-,omitempty"`
 	IsCompleted       bool         `gorm:"column:is_completed" json:"is_completed,omitempty"`
 	CompletedByUserID int          `gorm:"column:completed_by_user_id" json:"completed_by_user_id"`

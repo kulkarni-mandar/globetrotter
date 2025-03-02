@@ -15,7 +15,7 @@ func NewGame(userName string) (models.ResponseNewGame, error) {
 	}
 
 	game := &models.Game{
-		StartedAt: sql.NullTime{Time: time.Now()},
+		CreatedAt: sql.NullTime{Time: time.Now()},
 		SessionID: int(time.Now().Unix()),
 		UserOneID: userID,
 		UserTwoID: 0,
@@ -138,7 +138,7 @@ func ValidateAnswer(userName string, sessionID int, clueID int, selectedCityID i
 	}
 
 	return models.ResponseValidateAnswer{
-		Correct: false,
+		Correct: isCorrect,
 		Facts:   facts,
 	}, nil
 }

@@ -11,7 +11,7 @@ import (
 
 func AddUser(user *models.User) error {
 
-	user.CreatedAt = sql.NullTime{Time: time.Now()}
+	user.CreatedAt = sql.NullTime{Time: time.Now(), Valid: true}
 	user.UserName = fmt.Sprint(time.Now().Unix())
 
 	return database.Get().Create(user).Error
@@ -20,7 +20,7 @@ func AddUser(user *models.User) error {
 func GetUserID(userName string) (int, error) {
 	var userId int
 
-	err := database.Get().Model(&models.User{UserName: userName}).Select("id").Scan(&userId).Error
+	err := database.Get().Model(&models.User{}).Where(&models.User{UserName: userName}).Select("id").Scan(&userId).Error
 	if err != nil {
 		return 0, err
 	}
@@ -35,7 +35,7 @@ func GetUserID(userName string) (int, error) {
 func GetUserName(userID int) (string, error) {
 	var userName string
 
-	err := database.Get().Model(&models.User{ID: userID}).Select("user_name").Scan(&userName).Error
+	err := database.Get().Model(&models.User{}).Where(&models.User{ID: userID}).Select("user_name").Scan(&userName).Error
 	if err != nil {
 		return "", err
 	}

@@ -27,7 +27,7 @@ type ResponseNextQuestion struct {
 }
 
 type ResponseValidateAnswer struct {
-	Correct bool   `json:"bool"`
+	Correct bool   `json:"correct"`
 	Facts   []Fact `json:"facts,omitempty"`
 }
 
