@@ -36,3 +36,13 @@ export const validateAnswer = async (userName, sessionId, clueId, selectedOption
     return { correct: false };
   }
 };
+
+export const endGame = async (userName, sessionId) => {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/game/play/${userName}/${sessionId}/end`);
+      return response.data;
+    } catch (error) {
+      console.error("Error ending game:", error);
+      return null;
+    }
+  };

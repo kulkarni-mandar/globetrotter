@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { createUserAndStartGame, fetchNextQuestion, validateAnswer } from "../api/gameApi";
+import { createUserAndStartGame, fetchNextQuestion, validateAnswer, endGame } from "../api/gameApi";
 import ConfettiAnimation from "./Confetti";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -42,6 +42,19 @@ const QuizGame = () => {
     }
   };
 
+  const handleEndGame = async () => {
+    if (!sessionId) return;
+
+    const result = await endGame(userName, sessionId);
+    console.log("Game ended:", result);
+    
+    // Reset game state
+    setUserName(null);
+    setSessionId(null);
+    setQuestion(null);
+    setFeedback(null);
+  };
+
   return (
     <div className="container text-center mt-5">
       <ConfettiAnimation show={showConfetti} />
@@ -81,10 +94,17 @@ const QuizGame = () => {
               {feedback && <h3 className="mt-4">{feedback}</h3>}
 
               <button
-                className="btn btn-warning mt-4"
+                className="btn btn-warning mt-4 mr-2"
                 onClick={() => loadNextQuestion(userName, sessionId)}
               >
                 Skip
+              </button>
+
+              <button
+                className="btn btn-danger mt-4"
+                onClick={handleEndGame}
+              >
+                End Game
               </button>
             </>
           )}
