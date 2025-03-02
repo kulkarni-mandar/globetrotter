@@ -10,7 +10,7 @@ RUN go mod download
 COPY . .
 
 # Build the binary
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o server .
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o server ./cmd/globetrotter/main.go
 
 FROM alpine:latest
 
@@ -27,3 +27,4 @@ EXPOSE 8080
 # Run the binary
 CMD ["./server"]
 ARG ["--config","./app.yaml"]
+ARG ["--dataset","./dataset.json"]

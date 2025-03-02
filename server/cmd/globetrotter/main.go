@@ -12,13 +12,17 @@ import (
 )
 
 var configPath string
+var initDatasetPath string
 
 func init() {
 	// read config path
 	flag.StringVar(&configPath, "config", "./app.yaml", "config for server")
+	flag.StringVar(&initDatasetPath, "dataset", "./dataset.json", "dataset for initializing the quiz")
+
 	flag.Parse()
 
 	logging.Info("config path parsed", "config", configPath)
+	logging.Info("dataset path parsed", "dataset", initDatasetPath)
 
 	// init config
 	config.New(&configPath)
@@ -26,6 +30,11 @@ func init() {
 	database.New()
 
 	logging.Debug("connected to database")
+
+	err := database.ReloadDataset(initDatasetPath)
+	if err != nil {
+		logging.Error("error in loading dataset", "error", err)
+	}
 }
 
 func main() {

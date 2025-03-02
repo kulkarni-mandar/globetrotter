@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: globetrotter
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d globetrotter"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    network_mode: host  # Use host networking
+
+  server:
+    build: ./server/Dockerfile.yaml
+    container_name: globetrotter-server
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    network_mode: host  # Use host networking
