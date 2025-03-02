@@ -54,5 +54,5 @@ func main() {
 		"port", config.Get().Server.Port,
 	)
 
-	router.Run(":" + config.Get().Server.Port)
+	router.Run("0.0.0.0:" + config.Get().Server.Port)
 }
