@@ -33,5 +33,6 @@ type ResponseValidateAnswer struct {
 
 type ResponseEndGame struct {
 	WinnerUserName string `json:"winner_user,omitempty"`
+	Score          int    `json:"score"`
 	Completed      bool   `json:"completed,omitempty"`
 }

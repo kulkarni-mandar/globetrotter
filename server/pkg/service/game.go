@@ -181,8 +181,16 @@ func EndGame(userName string, sessionID int) (models.ResponseEndGame, error) {
 		return models.ResponseEndGame{}, err
 	}
 
+	currentScore := 0
+	if game.UserOneID == userID {
+		currentScore = game.ScoreOne
+	} else {
+		currentScore = game.ScoreTwo
+	}
+
 	return models.ResponseEndGame{
 		WinnerUserName: winnerUserName,
 		Completed:      true,
+		Score:          currentScore,
 	}, nil
 }
