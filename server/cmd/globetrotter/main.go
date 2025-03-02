@@ -43,6 +43,7 @@ func main() {
 	router := gin.New()
 
 	router.Use(
+		middlewares.Cors(),
 		middlewares.Logger(),
 		middlewares.PanicRecovery(),
 	)
