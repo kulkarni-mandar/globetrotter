@@ -9,6 +9,7 @@ const QuizGame = () => {
   const [question, setQuestion] = useState(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const [feedback, setFeedback] = useState(null);
+  const [winnerMessage, setWinnerMessage] = useState(null);
 
   const startGame = async () => {
     const gameData = await createUserAndStartGame();
@@ -48,11 +49,29 @@ const QuizGame = () => {
     const result = await endGame(userName, sessionId);
     console.log("Game ended:", result);
     
-    // Reset game state
+    if (result?.winner_user === userName && result.score > 0) {
+      setWinnerMessage("🎉 Congratulations! You are the winner! 🎉");
+      setShowConfetti(true);
+
+      // Hide message and confetti after 30 seconds
+      setTimeout(() => {
+        setWinnerMessage(null);
+        setShowConfetti(false);
+        resetGame();
+      }, 10000);
+    } else {
+      // If user is not winner, reset immediately
+      resetGame();
+    }
+  };
+
+  const resetGame = () => {
     setUserName(null);
     setSessionId(null);
     setQuestion(null);
     setFeedback(null);
+    setWinnerMessage(null);
+    setShowConfetti(false);
   };
 
   return (
@@ -93,21 +112,25 @@ const QuizGame = () => {
 
               {feedback && <h3 className="mt-4">{feedback}</h3>}
 
-              <button
-                className="btn btn-warning mt-4 mr-2"
-                onClick={() => loadNextQuestion(userName, sessionId)}
-              >
-                Skip
-              </button>
+              <div className="mt-4">
+                <button
+                  className="btn btn-warning mx-2"
+                  onClick={() => loadNextQuestion(userName, sessionId)}
+                >
+                  Skip
+                </button>
 
-              <button
-                className="btn btn-danger mt-4"
-                onClick={handleEndGame}
-              >
-                End Game
-              </button>
+                <button
+                  className="btn btn-danger mx-2"
+                  onClick={handleEndGame}
+                >
+                  End Game
+                </button>
+              </div>
             </>
           )}
+
+          {winnerMessage && <h2 className="mt-4 text-success">{winnerMessage}</h2>}
         </div>
       )}
     </div>
